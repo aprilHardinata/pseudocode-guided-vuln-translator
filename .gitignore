@@ -1,0 +1,9 @@
+# Python / Virtual Environment
+__pycache__/
+*.pyc
+venv/
+.env
+
+# Vector DB / Local Store (akan sangat besar nanti)
+chroma_db/
+.chroma/
