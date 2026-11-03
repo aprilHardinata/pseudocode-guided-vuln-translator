@@ -23,24 +23,29 @@ for idx, sample in enumerate(data, start=1):
 
   # Tahap 1: Ekstraksi Pseudocode (Jembatan Semantik)
   prompt_1 = f"""
-Ubah kode C/C++ berikut menjadi pseudocode yang mengunci logika semantik dan alur variabelnya:
+Extract a clear, semantics-preserving pseudocode from the following C/C++ code.
+Focus on locking variable flows, memory control, and logical conditions:
+
 {kode_c}
 """
+  
   resp_1 = ollama.generate(model="qwen2.5-coder:7b", prompt=prompt_1)
   pseudocode = resp_1.get("response", "")
 
   # Tahap 2: Translasi ke Python & Anotasi CWE
   prompt_2 = f"""
-Gunakan pseudocode berikut sebagai panduan utama:
+Use the following pseudocode as your primary guide:
 {pseudocode}
 
-Referensikan juga kode asli C ini:
+Refer to the original C code for reference:
 {kode_c}
 
-Berdasarkan label kerentanan {cwe_id}:
-1. Terjemahkan logika kode di atas ke dalam bahasa Python.
-2. Tunjukkan dan soroti baris kode Python yang rentan.
-3. Jelaskan alasan teknisnya secara singkat mengapa baris tersebut rentan.
+Based on the vulnerability label {cwe_id}:
+1. Translate the code logic accurately into Python.
+2. Highlight the vulnerable line(s) in the Python code.
+3. Explain the technical root cause briefly.
+
+IMPORTANT: Provide the technical explanation and vulnerability reasoning in Indonesian.
 """
   resp_2 = ollama.generate(model="qwen2.5-coder:7b", prompt=prompt_2)
   hasil_final = resp_2.get("response", "")
